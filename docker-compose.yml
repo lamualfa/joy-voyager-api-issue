@@ -1,0 +1,27 @@
+version: '3.9'
+services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=lamualfa-root-password
+      - MYSQL_USER=lamualfa-user
+      - MYSQL_PASSWORD=lamualfa-password
+      - MYSQL_DATABASE=lamualfa-database
+    ports:
+      - '3001:3306'
+  cms:
+    image: docker.io/bitnami/laravel:8
+    ports:
+      - '8000:8000'
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USERNAME=lamualfa-user
+      - DB_PASSWORD=lamualfa-password
+      - DB_DATABASE=lamualfa-database
+    volumes:
+      - './cms:/app:z'
+    depends_on:
+      - db
